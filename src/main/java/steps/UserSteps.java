@@ -1,7 +1,6 @@
 package steps;
 
 import io.qameta.allure.Step;
-import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Assert;
 import serial.Credentials;
@@ -26,8 +25,8 @@ public class UserSteps extends Client {
     }
 
     @Step("User deletion")
-    public ValidatableResponse deleteUser(String accessToken) {
-        return given()
+    public void deleteUser(String accessToken) {
+                given()
                 .header("authorization", "bearer " + accessToken)
                 .spec(getSpec())
                 .when()
@@ -74,7 +73,7 @@ public class UserSteps extends Client {
         return validatableResponse.extract().path("accessToken").toString().substring(6).trim();
     }
 
-    @Step("Check body - (success: true) and server response status when creating user - 200")
+    @Step("Check body - (success: true) and server response status when creating or modifying user - 200")
     public void checkAnswerSuccess(ValidatableResponse validatableResponse) {
         validatableResponse
                 .body("success", is(true))
@@ -82,10 +81,21 @@ public class UserSteps extends Client {
     }
 
     @Step("Checking the response after creating an already registered user")
+    public void checkAnswerAlreadyExist(ValidatableResponse validatableResponse) {
+        validatableResponse.assertThat()
+                .body("success", is(false))
+                .and().statusCode(403);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("User already exists", actualMessage);
+    }
+
+    @Step("Validation of the response when created without the required field email, password and name")
     public void checkAnswerForbidden(ValidatableResponse validatableResponse) {
         validatableResponse.assertThat()
                 .body("success", is(false))
                 .and().statusCode(403);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("Email, password and name are required fields", actualMessage);
     }
 
     @Step("Checking the response after login with wrong credentials")
@@ -95,6 +105,15 @@ public class UserSteps extends Client {
                 .and().statusCode(401);
         String actualMessage = validatableResponse.extract().path("message").toString();
         Assert.assertEquals("email or password are incorrect", actualMessage);
+    }
+
+    @Step("Validate response after changing user data without access token")
+    public void checkAnswerWithoutToken(ValidatableResponse validatableResponse) {
+        validatableResponse.assertThat()
+                .body("success", is(false))
+                .and().statusCode(401);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("You should be authorised", actualMessage);
     }
 
     @Step("Removing possible users after tests")

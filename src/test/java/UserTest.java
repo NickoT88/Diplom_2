@@ -38,7 +38,7 @@ public class UserTest {
         ValidatableResponse responseCreate = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         accessToken = userSteps.getAccessToken(responseCreate);
         ValidatableResponse responseIdentical = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
-        userSteps.checkAnswerForbidden(responseIdentical);
+        userSteps.checkAnswerAlreadyExist(responseIdentical);
         userSteps.deleteUser(accessToken);
     }
 
