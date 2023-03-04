@@ -21,10 +21,8 @@ public class CreateOrderTest {
     public void setUp() {
         userSteps = new UserSteps();
         orderSteps = new OrderSteps();
-        ValidatableResponse responseCreate = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
-        userSteps.checkAnswerSuccess(responseCreate);
+        userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);
-        userSteps.checkAnswerSuccess(responseLogin);
         accessToken = userSteps.getAccessToken(responseLogin);
     }
 
@@ -86,8 +84,6 @@ public class CreateOrderTest {
     public void close() {
         userSteps.deletingUsersAfterTests(accessToken);
     }
-
-
 
 
 }

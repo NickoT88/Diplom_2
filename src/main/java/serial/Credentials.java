@@ -9,7 +9,7 @@ public class Credentials {
         this.password = password;
     }
 
-    public Credentials(){
+    public Credentials() {
     }
 
     public String getEmail() {

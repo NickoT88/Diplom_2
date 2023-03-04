@@ -26,7 +26,7 @@ public class UserSteps extends Client {
 
     @Step("User deletion")
     public void deleteUser(String accessToken) {
-                given()
+        given()
                 .header("authorization", "bearer " + accessToken)
                 .spec(getSpec())
                 .when()
@@ -34,7 +34,7 @@ public class UserSteps extends Client {
                 .then();
     }
 
-    @Step("Authorization with a token")
+    @Step("Authorization with a access token")
     public ValidatableResponse authorizationWithToken(String accessToken, String email, String password, String name) {
         User user = new User(email, password, name);
         return given()
@@ -46,7 +46,7 @@ public class UserSteps extends Client {
                 .then();
     }
 
-    @Step("Authorization without a token ")
+    @Step("Authorization without a access token")
     public ValidatableResponse authorizationWithoutToken(String email, String password, String name) {
         User user = new User(email, password, name);
         return given()
@@ -73,7 +73,7 @@ public class UserSteps extends Client {
         return validatableResponse.extract().path("accessToken").toString().substring(6).trim();
     }
 
-    @Step("Check body - (success: true) and server response status when creating or modifying user - 200")
+    @Step("Check body - (success: true) and server response status when creating, modifying a user, or getting a list of user orders - 200")
     public void checkAnswerSuccess(ValidatableResponse validatableResponse) {
         validatableResponse
                 .body("success", is(true))
@@ -117,7 +117,7 @@ public class UserSteps extends Client {
     }
 
     @Step("Removing possible users after tests")
-    public void deletingUsersAfterTests (String accessToken) {
+    public void deletingUsersAfterTests(String accessToken) {
         if (accessToken != null) {
             deleteUser(accessToken);
         }

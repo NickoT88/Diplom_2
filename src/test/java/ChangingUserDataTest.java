@@ -21,13 +21,13 @@ public class ChangingUserDataTest {
     @Test
     @DisplayName("Changing user data with authorization")
     @Description("Changing user data with passing the authorization token to api/auth/user")
-    public void changingDataWithAuthPossible(){
+    public void changingDataWithAuthPossible() {
         ValidatableResponse responseCreate = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         userSteps.checkAnswerSuccess(responseCreate);
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);
         userSteps.checkAnswerSuccess(responseLogin);
         accessToken = userSteps.getAccessToken(responseLogin);
-        ValidatableResponse responseChangeWithToken = userSteps.authorizationWithToken(accessToken,"x" + RANDOM_EMAIL, "x" + RANDOM_PASS, "x" + RANDOM_NAME);
+        ValidatableResponse responseChangeWithToken = userSteps.authorizationWithToken(accessToken, "x" + RANDOM_EMAIL, "x" + RANDOM_PASS, "x" + RANDOM_NAME);
         userSteps.checkAnswerSuccess(responseChangeWithToken);
         userSteps.deleteUser(accessToken);
     }
@@ -35,7 +35,7 @@ public class ChangingUserDataTest {
     @Test
     @DisplayName("Changing user data without authorization")
     @Description("Changing user data without passing the authorization token to api/auth/user")
-    public void changingDataWithoutAuthNotPossible(){
+    public void changingDataWithoutAuthNotPossible() {
         ValidatableResponse responseCreate = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         userSteps.checkAnswerSuccess(responseCreate);
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);

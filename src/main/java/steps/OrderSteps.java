@@ -5,13 +5,12 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.Assert;
 import serial.Order;
 
-import static constants.RandomData.*;
 import static constants.Urls.ORDERS_URL;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 public class OrderSteps extends Client {
-    @Step("Order creation without token")
+    @Step("Order creation without access token")
     public ValidatableResponse createOrderWithoutToken(Order order) {
         return given()
                 .spec(getSpec())
@@ -21,7 +20,7 @@ public class OrderSteps extends Client {
                 .then();
     }
 
-    @Step("Order creation with token")
+    @Step("Order creation with access token")
     public ValidatableResponse createOrderWithToken(String accessToken, Order order) {
         return given()
                 .header("authorization", "bearer " + accessToken)
@@ -32,7 +31,7 @@ public class OrderSteps extends Client {
                 .then();
     }
 
-    @Step("List of orders without token")
+    @Step("List of orders without access token")
     public ValidatableResponse listOfOrdersWithoutToken() {
         return given()
                 .spec(getSpec())
@@ -42,7 +41,7 @@ public class OrderSteps extends Client {
                 .then();
     }
 
-    @Step("List of orders with token")
+    @Step("List of orders with access token")
     public ValidatableResponse listOfOrdersWithToken(String accessToken) {
         return given()
                 .header("authorization", "bearer " + accessToken)
@@ -62,10 +61,19 @@ public class OrderSteps extends Client {
         Assert.assertEquals("Ingredient ids must be provided", actualMessage);
     }
 
-    @Step("Checking the answer when creating an order without ingredients")
+    @Step("Checking the answer when creating an order with the wrong ingredient hash")
     public void checkAnswerWithWrongHash(ValidatableResponse validatableResponse) {
         validatableResponse
                 .statusCode(500);
+    }
+
+    @Step("Checking the response when receiving a list of orders from an unauthorized user")
+    public void checkAnswerGetListNonAuth(ValidatableResponse validatableResponse) {
+        validatableResponse.assertThat()
+                .body("success", is(false))
+                .and().statusCode(401);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("You should be authorised", actualMessage);
     }
 
 }
