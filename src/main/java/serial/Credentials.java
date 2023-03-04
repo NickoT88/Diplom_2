@@ -2,11 +2,11 @@ package serial;
 
 public class Credentials {
     private String email;
-    private String name;
+    private String password;
 
-    public Credentials(String email, String name) {
+    public Credentials(String email, String password) {
         this.email = email;
-        this.name = name;
+        this.password = password;
     }
 
     public Credentials(){
@@ -20,11 +20,11 @@ public class Credentials {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

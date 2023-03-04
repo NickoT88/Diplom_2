@@ -1,8 +1,9 @@
 package steps;
 
 import io.qameta.allure.Step;
-import io.restassured.response.Response;
+import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import org.junit.Assert;
 import serial.Credentials;
 import serial.User;
 
@@ -58,8 +59,8 @@ public class UserSteps extends Client {
     }
 
     @Step("User login")
-    public ValidatableResponse login(String email, String name) {
-        Credentials credentials = new Credentials(email, name);
+    public ValidatableResponse login(String email, String password) {
+        Credentials credentials = new Credentials(email, password);
         return given()
                 .spec(getSpec())
                 .body(credentials)
@@ -74,7 +75,7 @@ public class UserSteps extends Client {
     }
 
     @Step("Check body - (success: true) and server response status when creating user - 200")
-    public void checkAnswerAfterSuccessCreate(ValidatableResponse validatableResponse) {
+    public void checkAnswerSuccess(ValidatableResponse validatableResponse) {
         validatableResponse
                 .body("success", is(true))
                 .statusCode(200);
@@ -85,5 +86,21 @@ public class UserSteps extends Client {
         validatableResponse.assertThat()
                 .body("success", is(false))
                 .and().statusCode(403);
+    }
+
+    @Step("Checking the response after login with wrong credentials")
+    public void checkAnswerWithWrongData(ValidatableResponse validatableResponse) {
+        validatableResponse.assertThat()
+                .body("success", is(false))
+                .and().statusCode(401);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("email or password are incorrect", actualMessage);
+    }
+
+    @Step("Removing possible users after tests")
+    public void deletingUsersAfterTests (String accessToken) {
+        if (accessToken != null) {
+            deleteUser(accessToken);
+        }
     }
 }
