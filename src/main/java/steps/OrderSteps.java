@@ -1,20 +1,16 @@
 package steps;
 
 import io.qameta.allure.Step;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import org.junit.Assert;
 import serial.Order;
 
 import static constants.RandomData.*;
 import static constants.Urls.ORDERS_URL;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 public class OrderSteps extends Client {
-    UserSteps userSteps = new UserSteps();
-    //userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
-    ValidatableResponse  responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_NAME);
-    String accessToken = userSteps.getAccessToken(responseLogin);
-
     @Step("Order creation without token")
     public ValidatableResponse createOrderWithoutToken(Order order) {
         return given()
@@ -26,7 +22,7 @@ public class OrderSteps extends Client {
     }
 
     @Step("Order creation with token")
-    public ValidatableResponse createOrderWithToken(Order order) {
+    public ValidatableResponse createOrderWithToken(String accessToken, Order order) {
         return given()
                 .header("authorization", "bearer " + accessToken)
                 .spec(getSpec())
@@ -47,7 +43,7 @@ public class OrderSteps extends Client {
     }
 
     @Step("List of orders with token")
-    public ValidatableResponse listOfOrdersWithToken() {
+    public ValidatableResponse listOfOrdersWithToken(String accessToken) {
         return given()
                 .header("authorization", "bearer " + accessToken)
                 .spec(getSpec())
@@ -55,6 +51,21 @@ public class OrderSteps extends Client {
                 .when()
                 .get(ORDERS_URL)
                 .then();
+    }
+
+    @Step("Checking the answer when creating an order without ingredients")
+    public void checkAnswerWithoutIngredients(ValidatableResponse validatableResponse) {
+        validatableResponse
+                .body("success", is(false))
+                .statusCode(400);
+        String actualMessage = validatableResponse.extract().path("message").toString();
+        Assert.assertEquals("Ingredient ids must be provided", actualMessage);
+    }
+
+    @Step("Checking the answer when creating an order without ingredients")
+    public void checkAnswerWithWrongHash(ValidatableResponse validatableResponse) {
+        validatableResponse
+                .statusCode(500);
     }
 
 }

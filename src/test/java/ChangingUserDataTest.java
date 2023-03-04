@@ -1,6 +1,5 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -8,7 +7,6 @@ import org.junit.Test;
 import steps.UserSteps;
 
 import static constants.RandomData.*;
-import static constants.Urls.BASE_URL;
 
 public class ChangingUserDataTest {
 
@@ -17,7 +15,6 @@ public class ChangingUserDataTest {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = BASE_URL;
         userSteps = new UserSteps();
     }
 
