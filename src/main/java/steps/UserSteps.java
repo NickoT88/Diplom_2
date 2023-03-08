@@ -27,18 +27,17 @@ public class UserSteps extends Client {
     @Step("User deletion")
     public void deleteUser(String accessToken) {
         given()
-                .header("authorization", "bearer " + accessToken)
+                .header("authorization", accessToken)
                 .spec(getSpec())
                 .when()
-                .delete(AUTH_USER_URL)
-                .then();
+                .delete(AUTH_USER_URL);
     }
 
     @Step("Authorization with a access token")
     public ValidatableResponse authorizationWithToken(String accessToken, String email, String password, String name) {
         User user = new User(email, password, name);
         return given()
-                .header("authorization", "bearer " + accessToken)
+                .header("authorization", accessToken)
                 .spec(getSpec())
                 .body(user)
                 .when()
@@ -70,7 +69,7 @@ public class UserSteps extends Client {
 
     @Step("Getting access token")
     public String getAccessToken(ValidatableResponse validatableResponse) {
-        return validatableResponse.extract().path("accessToken").toString().substring(6).trim();
+        return validatableResponse.extract().path("accessToken");
     }
 
     @Step("Check body - (success: true) and server response status when creating, modifying a user, or getting a list of user orders - 200")
@@ -121,5 +120,9 @@ public class UserSteps extends Client {
         if (accessToken != null) {
             deleteUser(accessToken);
         }
+        else { given().spec(getSpec())
+                .when()
+                .delete(AUTH_USER_URL);
+                 }
     }
 }

@@ -23,7 +23,7 @@ public class OrderSteps extends Client {
     @Step("Order creation with access token")
     public ValidatableResponse createOrderWithToken(String accessToken, Order order) {
         return given()
-                .header("authorization", "bearer " + accessToken)
+                .header("authorization", accessToken)
                 .spec(getSpec())
                 .body(order)
                 .when()
@@ -44,7 +44,7 @@ public class OrderSteps extends Client {
     @Step("List of orders with access token")
     public ValidatableResponse listOfOrdersWithToken(String accessToken) {
         return given()
-                .header("authorization", "bearer " + accessToken)
+                .header("authorization", accessToken)
                 .spec(getSpec())
                 .body("")
                 .when()
