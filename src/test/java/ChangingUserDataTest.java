@@ -10,8 +10,8 @@ import static constants.RandomData.*;
 
 public class ChangingUserDataTest {
 
-    UserSteps userSteps;
-    String accessToken;
+    private UserSteps userSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -29,7 +29,6 @@ public class ChangingUserDataTest {
         accessToken = userSteps.getAccessToken(responseLogin);
         ValidatableResponse responseChangeWithToken = userSteps.authorizationWithToken(accessToken, "x" + RANDOM_EMAIL, "x" + RANDOM_PASS, "x" + RANDOM_NAME);
         userSteps.checkAnswerSuccess(responseChangeWithToken);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -43,7 +42,6 @@ public class ChangingUserDataTest {
         accessToken = userSteps.getAccessToken(responseLogin);
         ValidatableResponse responseChangeWithoutToken = userSteps.authorizationWithoutToken("x" + RANDOM_EMAIL, "x" + RANDOM_PASS, "x" + RANDOM_NAME);
         userSteps.checkAnswerWithoutToken(responseChangeWithoutToken);
-        userSteps.deleteUser(accessToken);
     }
 
     @After

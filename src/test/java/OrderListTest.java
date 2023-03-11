@@ -13,10 +13,10 @@ import java.util.List;
 import static constants.RandomData.*;
 
 public class OrderListTest {
-    UserSteps userSteps;
-    Order order;
-    OrderSteps orderSteps;
-    String accessToken;
+    private UserSteps userSteps;
+    private Order order;
+    private OrderSteps orderSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -35,7 +35,6 @@ public class OrderListTest {
     public void getListOfOrdersAuthSuccess() {
         ValidatableResponse responseGetList = orderSteps.listOfOrdersWithToken(accessToken);
         userSteps.checkAnswerSuccess(responseGetList);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -44,11 +43,11 @@ public class OrderListTest {
     public void getListOfOrdersNonAuthUnauthorized() {
         ValidatableResponse responseGetList = orderSteps.listOfOrdersWithoutToken();
         orderSteps.checkAnswerGetListNonAuth(responseGetList);
-        userSteps.deleteUser(accessToken);
     }
 
     @After
     public void close() {
         userSteps.deletingUsersAfterTests(accessToken);
     }
+
 }

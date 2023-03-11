@@ -12,10 +12,10 @@ import java.util.List;
 import static constants.RandomData.*;
 
 public class CreateOrderTest {
-    UserSteps userSteps;
-    Order order;
-    OrderSteps orderSteps;
-    String accessToken;
+    private UserSteps userSteps;
+    private Order order;
+    private OrderSteps orderSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -32,7 +32,6 @@ public class CreateOrderTest {
         order = new Order(List.of("61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f", "61c0c5a71d1f82001bdaaa72"));
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);
         userSteps.checkAnswerSuccess(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -41,7 +40,6 @@ public class CreateOrderTest {
         order = new Order();
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);
         orderSteps.checkAnswerWithoutIngredients(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -50,7 +48,6 @@ public class CreateOrderTest {
         order = new Order(List.of("123zxc"));
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithToken(accessToken, order);
         orderSteps.checkAnswerWithWrongHash(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -59,7 +56,6 @@ public class CreateOrderTest {
         order = new Order(List.of("61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f", "61c0c5a71d1f82001bdaaa72"));
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithoutToken(order);
         userSteps.checkAnswerSuccess(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -68,7 +64,6 @@ public class CreateOrderTest {
         order = new Order();
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithoutToken(order);
         orderSteps.checkAnswerWithoutIngredients(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -77,13 +72,11 @@ public class CreateOrderTest {
         order = new Order(List.of("123zxc"));
         ValidatableResponse responseCreateAuth = orderSteps.createOrderWithoutToken(order);
         orderSteps.checkAnswerWithWrongHash(responseCreateAuth);
-        userSteps.deleteUser(accessToken);
     }
 
     @After
     public void close() {
         userSteps.deletingUsersAfterTests(accessToken);
     }
-
 
 }

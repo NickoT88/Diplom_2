@@ -119,10 +119,10 @@ public class UserSteps extends Client {
     public void deletingUsersAfterTests(String accessToken) {
         if (accessToken != null) {
             deleteUser(accessToken);
+        } else {
+            given().spec(getSpec())
+                    .when()
+                    .delete(AUTH_USER_URL);
         }
-        else { given().spec(getSpec())
-                .when()
-                .delete(AUTH_USER_URL);
-                 }
     }
 }

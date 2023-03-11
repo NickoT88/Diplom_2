@@ -10,8 +10,8 @@ import static constants.RandomData.*;
 
 public class LoginUserTest {
 
-    UserSteps userSteps;
-    String accessToken;
+    private UserSteps userSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -26,7 +26,6 @@ public class LoginUserTest {
     public void loginUserSuccess() {
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, RANDOM_PASS);
         userSteps.checkAnswerSuccess(responseLogin);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -35,7 +34,6 @@ public class LoginUserTest {
     public void loginUserWithWrongEmailUnauthorized() {
         ValidatableResponse responseLogin = userSteps.login("wrongEmail@yandex.ru", RANDOM_PASS);
         userSteps.checkAnswerWithWrongData(responseLogin);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -44,11 +42,11 @@ public class LoginUserTest {
     public void loginUserWithWrongPassUnauthorized() {
         ValidatableResponse responseLogin = userSteps.login(RANDOM_EMAIL, "123456");
         userSteps.checkAnswerWithWrongData(responseLogin);
-        userSteps.deleteUser(accessToken);
     }
 
     @After
     public void close() {
         userSteps.deletingUsersAfterTests(accessToken);
     }
+
 }

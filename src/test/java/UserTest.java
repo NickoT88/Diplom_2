@@ -10,8 +10,8 @@ import static constants.RandomData.*;
 
 public class UserTest {
 
-    UserSteps userSteps;
-    String accessToken;
+    private UserSteps userSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -25,7 +25,6 @@ public class UserTest {
         ValidatableResponse responseCreate = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         userSteps.checkAnswerSuccess(responseCreate);
         accessToken = userSteps.getAccessToken(responseCreate);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
@@ -36,7 +35,6 @@ public class UserTest {
         accessToken = userSteps.getAccessToken(responseCreate);
         ValidatableResponse responseIdentical = userSteps.createUser(RANDOM_EMAIL, RANDOM_PASS, RANDOM_NAME);
         userSteps.checkAnswerAlreadyExist(responseIdentical);
-        userSteps.deleteUser(accessToken);
     }
 
     @Test
